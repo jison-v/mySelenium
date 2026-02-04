@@ -10,11 +10,30 @@ import java.time.Duration;
 
 public class SeleniumAssertions {
 
-    public boolean verifyText(By locator, By expectedText){
+    public WebElement element(By locator){
 
-        WebElement element = new WebDriverWait (Browser.getDriver(), Duration.ofSeconds(10))
+        return new WebDriverWait(Browser.getDriver(), Duration.ofSeconds(10))
                 .until(ExpectedConditions.presenceOfElementLocated(locator));
-        if (element.getText().equals(expectedText)){
+    }
+
+    public boolean verifyText(By locator, String expectedText){
+
+        if (element(locator).getText().equals(expectedText)){
+            return true;
+        }else return false;
+    }
+
+    public boolean verifyEnabled(By locator){
+
+        if (element(locator).isEnabled()){
+            return true;
+        } else return false;
+
+    }
+
+    public boolean verifyValue(By locator, String value){
+
+        if(element(locator).getAttribute("value").equals(value)){
             return true;
         }else return false;
     }

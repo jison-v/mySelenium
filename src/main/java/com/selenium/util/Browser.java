@@ -13,6 +13,11 @@ public class Browser {
 
         driver.manage().window().maximize();
 
-        return  driver;
+        return driver;
+    }
+
+    public static void closeDriver(){
+
+        if(driver != null) driver.quit();
     }
 }
