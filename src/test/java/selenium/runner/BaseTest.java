@@ -1,7 +1,6 @@
 package selenium.runner;
 
 import com.selenium.actions.SeleniumActions;
-import com.selenium.actions.SeleniumAssertions;
 import com.selenium.pageobjects.CHEDPage;
 import com.selenium.pageobjects.FacebookLoginPage;
 import com.selenium.util.Browser;

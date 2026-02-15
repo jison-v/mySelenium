@@ -10,18 +10,17 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.Reporter;
-
 import java.time.Duration;
 
 public class SeleniumActions {
+
+    private static final Logger log = LogManager.getLogger(SeleniumActions.class);
 
     public WebElement element(By locator){
 
         return new WebDriverWait(Browser.getDriver(), Duration.ofSeconds(10))
                 .until(ExpectedConditions.presenceOfElementLocated(locator));
     }
-
-    private static final Logger log = LogManager.getLogger();
 
     public void openBrowser(String url){
 
