@@ -1,32 +1,43 @@
 package selenium.runner;
 
-import com.selenium.actions.SeleniumActions;
-import com.selenium.pageobjects.CHEDPage;
-import com.selenium.pageobjects.FacebookLoginPage;
-import com.selenium.util.Browser;
+import com.seleniumFramework.pageobjects.CHEDPage;
+import com.seleniumFramework.pageobjects.AutomationExercisePage;
+import com.seleniumFramework.pageobjects.VerifyText_Page;
+import com.seleniumFramework.utils.Browser;
+import com.seleniumFramework.utils.SeleniumAssertions;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class BaseTest extends SeleniumActions {
+import static com.seleniumFramework.pageobjects.UI_Testing_Homepage.selectMenu;
 
-    SeleniumActions actions = new SeleniumActions();
-    FacebookLoginPage facebookLoginPage = new FacebookLoginPage();
+public class BaseTest extends Browser {
+
+    @BeforeTest(alwaysRun = true)
+    public void initializeDriver() {
+        setDriver("chrome");
+    }
+
+    @AfterTest(alwaysRun = true)
+    public void tearDown() {
+        quitDriver();
+    }
+
+    AutomationExercisePage facebookLoginPage = new AutomationExercisePage();
     CHEDPage chedPage = new CHEDPage();
 
     @Test(priority = 0)
-    public void openFacebookAndLogin(){
+    public void openAutomationExercisePage() throws InterruptedException {
 
-        actions.openBrowser("https://www.facebook.com/");
-        facebookLoginPage.enterUsername("sample@name.com");
-        facebookLoginPage.enterPassword("password");
+        navigateTo(TestData.AUTOMATION_EXERCISES_BASE_URL);
 
-        facebookLoginPage.clickLogin();
+        selectMenu(TestData.MenuOption.CART.getDisplayName());
     }
 
     @Test(priority = 1)
-    public void openETEEAPinCHEDPage(){
+    public void openETEEAPinCHEDPage() throws InterruptedException {
 
-        actions.openBrowser("https://ched.e.gov.ph/home");
+        navigateTo("https://ched.e.gov.ph/home");
         chedPage.selectMenu("Program and Project");
         chedPage.selectSubMenu("Non-conventional Path to Higher Ed");
 
@@ -34,10 +45,17 @@ public class BaseTest extends SeleniumActions {
 
     }
 
-    @AfterTest
-    public void TearDown(){
+    @Test
+    public void openUITestingPage() throws InterruptedException {
+        //Open url
+        navigateTo(TestData.UI_TESTING_BASE_URL);
+        waitForPageLoad(getDriver(), 10);
 
-        Browser.closeDriver();
+        //Select any overview menu
+        selectMenu(TestData.TestScenario.VERIFY_TEXT.getDisplayName());
+
+        //Verify the Header
+        SeleniumAssertions.verifyText(VerifyText_Page.HEADER,TestData.TestScenario.VERIFY_TEXT.getDisplayName());
     }
 
 }

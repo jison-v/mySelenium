@@ -1,13 +1,12 @@
-package com.selenium.pageobjects;
+package com.seleniumFramework.pageobjects;
 
-import com.selenium.actions.SeleniumActions;
-import com.selenium.actions.SeleniumAssertions;
+import com.seleniumFramework.utils.SeleniumActions;
+import com.seleniumFramework.utils.SeleniumAssertions;
 import org.openqa.selenium.By;
 
-public class CHEDPage {
+public class CHEDPage extends SeleniumActions{
 
-    SeleniumActions seleniumActions = new SeleniumActions();
-    SeleniumAssertions assertions = new SeleniumAssertions();
+    SeleniumAssertions seleniumAssertions = new SeleniumAssertions();
 
     private static final By HOME_MENU = By.xpath("//a[text()='HOME']");
     private static final By ABOUT_US_MENU = By.xpath("//button/span[text()='ABOUT US']");
@@ -17,32 +16,32 @@ public class CHEDPage {
 
     public void verifyETEEAPText() {
 
-        assertions.verifyText(ETEEAP_TAB, "ETEEAP");
+        seleniumAssertions.verifyText(ETEEAP_TAB, "ETEEAP");
     }
 
-    public void selectMenu(String menu) {
+    public void selectMenu(String menu) throws InterruptedException {
 
         switch (menu) {
 
             case "Home":
-                seleniumActions.ClickElement(HOME_MENU);
+                clickElement(HOME_MENU);
                 break;
             case "About":
-                seleniumActions.ClickElement(ABOUT_US_MENU);
+                clickElement(ABOUT_US_MENU);
                 break;
             case "Program and Project":
-                seleniumActions.ClickElement(PROGRAM_AND_PROJECT_MENU);
+                clickElement(PROGRAM_AND_PROJECT_MENU);
                 break;
             default:
                 break;
         }
     }
 
-    public void selectSubMenu(String subMenu){
+    public void selectSubMenu(String subMenu) throws InterruptedException {
 
         switch (subMenu) {
             case "Non-conventional Path to Higher Ed":
-                seleniumActions.ClickElement(NONCONVENTIONAL_SUBMENU);
+                clickElement(NONCONVENTIONAL_SUBMENU);
         }
     }
 }

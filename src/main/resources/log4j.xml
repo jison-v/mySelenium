@@ -1,19 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration status="warn">
+    <Properties>
+        <Property name="log.path">logs</Property>
+        <Property name="log.pattern">%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1} - %m%n</Property>
+    </Properties>
+
     <Appenders>
         <!-- Console Appender -->
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout pattern="${log.pattern}"/>
         </Console>
-        <!-- File Appender -->
-        <File name="File" fileName="logs/automation.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1} - %m%n"/>
-        </File>
+
+
+        <!-- Rolling File Appender -->
+        <RollingFile name="RollingFile" fileName="${log.path}/application.log"
+                     filePattern="${log.path}/application-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${log.pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
+
     <Loggers>
-        <Root level="Info">
+        <!-- Root Logger -->
+        <Root level="info">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
+            <AppenderRef ref="RollingFile"/>
         </Root>
+
+        <!-- Selenium Logs -->
+        <Logger name="org.openqa.selenium" level="warn" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Your Application Logs -->
+        <Logger name="com.seleniumFramework" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
     </Loggers>
 </Configuration>
+
