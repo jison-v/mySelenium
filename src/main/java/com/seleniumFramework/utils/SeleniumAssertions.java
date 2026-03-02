@@ -4,43 +4,44 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
-import static com.seleniumFramework.utils.Browser.getDriver;
+public class SeleniumAssertions extends Browser{
 
-public class SeleniumAssertions {
+    private static final int DEFAULT_TIMEOUT = 10;
+    private static final int LOW_TIMEOUT = 5;
+    private static final int HIGH_TIMEOUT = 20;
 
-    public static void verifyText(By locator, String expectedText) {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+    private static Logger consoleLogger = LoggerFactory.getLogger(SeleniumAssertions.class);
 
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        try{
-            String actualText = element.getText();
-            if (!actualText.equals(expectedText)) {
-                throw new AssertionError("Expected text: " + expectedText + ", but got: " + actualText);
-            }else{
-                System.out.println("Text verification passed: " + actualText);
-            }
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Element not found or not visible: " + locator);
+    public static void assertText(By locator, String actualText) {
+
+        waitForPageLoad(getDriver(), DEFAULT_TIMEOUT);
+        WebElement element = getElement(getDriver(), locator, LOW_TIMEOUT);
+        element = new WebDriverWait(getDriver(), Duration.ofSeconds(DEFAULT_TIMEOUT))
+                .until(ExpectedConditions.visibilityOf(element));
+
+        String expectedText = element.getText();
+        if (!expectedText.equals(actualText)) {
+            throw new AssertionError("FAILED: Expected text: '" + expectedText + "' but got: '" + actualText + "'");
+        }else{
+            consoleLogger.info("PASSED: Text verification successful. Expected and actual text: '{}'", expectedText);
         }
     }
 
-    public static void verifyEnabled(By locator) {
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+    public static void assertElementEnabled(By locator) {
+        waitForPageLoad(getDriver(), DEFAULT_TIMEOUT);
+        WebElement element = getElement(getDriver(), locator, LOW_TIMEOUT);
+        element = new WebDriverWait(getDriver(), Duration.ofSeconds(DEFAULT_TIMEOUT))
+                .until(ExpectedConditions.visibilityOf(element));
 
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        try{
-            if (!element.isEnabled()) {
-                throw new AssertionError("Expected element to be enabled, but it is disabled: " + locator);
-            }else{
-                System.out.println("Element is enabled as expected: " + locator);
-            }
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Element not found or not visible: " + locator);
+        if (!element.isEnabled()) {
+            throw new AssertionError("FAILED: Expected element to be enabled but it is disabled: " + locator);
+        }else{
+            consoleLogger.info("PASSED: Element is enabled as expected: {}", locator);
         }
     }
 }

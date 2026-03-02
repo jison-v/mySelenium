@@ -55,7 +55,7 @@ public class BaseTest extends Browser {
         selectMenu(TestData.TestScenario.VERIFY_TEXT.getDisplayName());
 
         //Verify the Header
-        SeleniumAssertions.verifyText(VerifyText_Page.HEADER,TestData.TestScenario.VERIFY_TEXT.getDisplayName());
+        SeleniumAssertions.assertText(VerifyText_Page.HEADER,TestData.TestScenario.VERIFY_TEXT.getDisplayName());
     }
 
 }

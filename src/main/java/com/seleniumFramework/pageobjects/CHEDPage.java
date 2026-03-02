@@ -16,7 +16,7 @@ public class CHEDPage extends SeleniumActions{
 
     public void verifyETEEAPText() {
 
-        seleniumAssertions.verifyText(ETEEAP_TAB, "ETEEAP");
+        seleniumAssertions.assertText (ETEEAP_TAB, "ETEEAP");
     }
 
     public void selectMenu(String menu) throws InterruptedException {
